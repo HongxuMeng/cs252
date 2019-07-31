@@ -1,0 +1,109 @@
+description of the output obtained in step 3:------
+you will have the randomly output combination of multiple ABCDE
+
+explanation of step 5:------------------
+since C is printed in the loop , there will only be C looping.
+
+turn in the modified thr1.cc from step 4
+
+
+
+explanation of part 4-----------------
+
+System  (Kernel) Time
+
+User Time
+
+Real Time
+
+
+pthread_mutex (count)
+
+ 
+
+spin lock (count_spin with thr_yield)
+
+ 
+
+spin_lock (count_spin without thr_yield)
+
+ 
+
+
+
+With yield and with spin lock
+
+
+real	0m0.676s
+user	0m0.989s
+sys	0m0.351s
+
+Without yield and with spin lock
+
+real	0m5.559s
+user	0m11.056s
+sys	0m0.004s
+
+With count 
+
+real	0m0.653s
+user	0m0.763s
+sys	0m0.421s
+
+
+
+
+pthread_mutex is pure kernel time with less user time.
+spin lock takes less kernel time and more user time.
+
+Without yield compared to with yield in count spin, the real time increases, the user time increases, the system time decrease
+user time in count_spin with yield
+The pthread_yield function causes the calling thread to give up the CPU. This means pthread_yield() function can yield to other process as needed.
+
+1)user time is longer without yield.
+When the pthread_yield is not called, thread_1 run for a specified time unit, thread_2 cannot execute, but it keeps checking whether there is a chance to get permission. That is why the  user time is longer. 
+2)
+Difference in system time between count and count_spin with thr_yield.
+The system time is greater in count. Because the count calls the system which need more time in system time. 
+
+
+/*
+The difference between mutex lock and spin lock is that the mutex lock put other threads in wait status. However, a spin lock Mae threads “spin” because they are busy at waiting until unlocked. Additionally, a spin lock usually wastes CPU cycles, causing more time 
+*/
+ 
+
+ 
+
+
+
+
+
+part 6:-----------------
+ The String I found is ...
+' ./buffer `printf "012345678912345\xef\xbe\xad\xde"`
+
+
+1.The correct little endian bytes
+THe correct way to pass the overflow part (deadbeef) using little Endian should be "efbeadde"
+
+2 execute exploit
+in the buffer.c , the buffer size was set to 15. In order to exploit the buffer overflow, we need to pass a string that is larger than 15. since the needed overflow is "efbeadde", therefore, we need 8 more characters to get the correct overflow. "xxxxxxxxxxxxxxx" is stored in buffer, "efbeadde" stands for overflow part.
+3 why works
+set_me and buffer[15] are next to each other in memory. The strcpy with copy the first 15 bits to the buffer and the rest will be over the boundary, causing overflow and changing the returned address. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
